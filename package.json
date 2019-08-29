@@ -1,0 +1,23 @@
+{
+  "name": "graph-traversal-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "priorityqueue": "^0.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xenithz/graph-traversal-node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Xenithz/graph-traversal-node/issues"
+  },
+  "homepage": "https://github.com/Xenithz/graph-traversal-node#readme"
+}
