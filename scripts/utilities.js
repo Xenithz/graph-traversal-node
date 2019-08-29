@@ -24,8 +24,8 @@ function generateMap(mapString) {
         for (let j = 0; j < 4; j++) {
             let node = new Node(null, j, i, mapString[j]);
             column.push(node);           
-            mapString = mapString.substring(1);
         }
+        mapString = mapString.substring(4);
         map.push(column);
     }
 

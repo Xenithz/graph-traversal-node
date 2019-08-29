@@ -10,9 +10,9 @@ function calculatePath(map, startingNode, endNode) {
 
     while(openList.length > 0) {
         let currentNode = openList[0];
-        openList.shift();
         closedList.push(currentNode);
         closedList.sort(comparator);
+        openList.shift();
 
         if(currentNode.xCoord === endNode.xCoord && currentNode.yCoord === endNode.yCoord) {
             console.log('found path');
@@ -26,8 +26,11 @@ function calculatePath(map, startingNode, endNode) {
             return path.reverse();
         }
 
+        console.log("------------------- GETTING WALKABLES -------------------");
+
         let childNodes = [];
         for (let i = 0; i < xAdj.length; i++) {
+            console.log(`CURRENT NODE NOW ${currentNode.xCoord}, ${currentNode.yCoord}`);
             let nodePosX = currentNode.xCoord + xAdj[i];
             let nodePosY = currentNode.yCoord + yAdj[i];
             
@@ -39,17 +42,37 @@ function calculatePath(map, startingNode, endNode) {
 
             console.log(`COORDS(${nodePosX}, ${nodePosY}) CONTENTS ${map[nodePosY][nodePosX].contents}`);
             if(map[nodePosY][nodePosX].contents != '0') {
-                console.log('hit wall');
+                console.log('HIT A WALL');
                 continue
             }
 
             let child = new Node(currentNode, nodePosX, nodePosY, 0);
-            childNodes.push(child);
+            let shouldAdd = false;
+
+            for (let j = 0; j < closedList.length; j++) {
+                if(child.xCoord === closedList[j].xCoord && child.yCoord === closedList[j].yCoord) {
+                    console.log(`FOUND CHILD INSIDE CLOSED COORDS (${child.xCoord}, ${child.yCoord}), IGNORING IT`);
+                    shouldAdd = false;
+                    break;
+                }
+                else {
+                    shouldAdd = true;
+                }                
+            }
+
+            if(shouldAdd) {
+                childNodes.push(child);
+            }
         }
+
+        console.log("------------------- CHECKING CHILDREN -------------------");
         
         for (let i = 0; i < childNodes.length; i++) {
-            if(closedList.includes(childNodes[i])) {
-                continue
+            for (let j = 0; j < closedList.length; j++) {
+                if(childNodes[i].xCoord === closedList[j].xCoord && childNodes[i].yCoord === closedList[j].yCoord) {
+                    console.log(`FOUND CHILD INSIDE CLOSED COORDS (${childNodes[i].xCoord}, ${childNodes[i].yCoord}), IGNORING IT`);
+                    break;
+                }
             }
 
             childNodes[i].gCost = currentNode.gCost + 1;
@@ -57,14 +80,18 @@ function calculatePath(map, startingNode, endNode) {
             childNodes[i].fCost = childNodes[i].gCost + childNodes.hCost;
 
             for (let j = 0; j < openList.length; j++) {
-                if(childNodes[i] === openList[j] && childNodes[i].gCost > openList[j].gCost) {
-                    continue
+                if(childNodes[i].xCoord === openList[j].xCoord && childNodes[i].yCoord === openList[j].yCoord && childNodes[i].gCost >= openList[j].gCost) {
+                    break;
                 }        
             }
-
+    
             openList.push(childNodes[i]);
             openList.sort(comparator);
         }
+
+        console.log("------------------- DONE WITH CHILDREN -------------------");
+
+        console.log(openList);
     }
 }
 
